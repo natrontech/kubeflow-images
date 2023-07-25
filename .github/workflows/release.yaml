@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - main
-    # paths:
-    #   - 'jupyther/tensorflow/**'
+    paths:
+      - 'jupyther/tensorflow/**'
 
 env:
   REGISTRY: ghcr.io
@@ -32,13 +32,11 @@ jobs:
       - name: Get Dockerfiles
         id: files
         run: |
-          echo "::set-output name=dockerfiles::$(find . -type f -name Dockerfile)"
+          echo "::set-output name=dockerfiles::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep Dockerfile)"
         shell: bash
 
       - name: Build and push Docker images
         run: |
-          echo "Building Docker images..."
-          echo ${{ steps.files.outputs.dockerfiles }}
           for dockerfile in ${{ steps.files.outputs.dockerfiles }}
           do
             version=$(basename $(dirname $dockerfile))
