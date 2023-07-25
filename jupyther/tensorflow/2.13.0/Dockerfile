@@ -1,4 +1,13 @@
 FROM jupyter/tensorflow-notebook:tensorflow-2.13.0
+
+RUN apt-get update
+RUN apt-get install -y git \
+  wget \
+  libgl1-mesa-glx
+
+# install pip
+RUN apt-get install -y python3-pip
+
 RUN /usr/bin/python3 -m pip install --upgrade pip
 
 RUN pip install pandas \
@@ -8,10 +17,7 @@ RUN pip install pandas \
   imutils \
   opencv-python
 
-RUN apt-get update
-RUN apt-get install -y git \
-  wget \
-  libgl1-mesa-glx
+
 
 ENV NB_PREFIX /
 
