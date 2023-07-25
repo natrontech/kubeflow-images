@@ -37,6 +37,8 @@ jobs:
 
       - name: Build and push Docker images
         run: |
+          echo "Building Docker images..."
+          echo ${{ steps.files.outputs.dockerfiles }}
           for dockerfile in ${{ steps.files.outputs.dockerfiles }}
           do
             version=$(basename $(dirname $dockerfile))
