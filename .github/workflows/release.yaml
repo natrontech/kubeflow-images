@@ -32,7 +32,7 @@ jobs:
       - name: Get Dockerfiles
         id: files
         run: |
-          echo "::set-output name=dockerfiles::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep Dockerfile)"
+          echo "::set-output name=dockerfiles::$(find . -type f -name Dockerfile)"
         shell: bash
 
       - name: Build and push Docker images

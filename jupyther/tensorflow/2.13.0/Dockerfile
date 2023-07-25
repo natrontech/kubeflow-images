@@ -1,4 +1,4 @@
-FROM tensorflow/tensorflow:2.13.0-gpu-jupyter
+FROM jupyter/tensorflow-notebook:tensorflow-2.13.0
 RUN /usr/bin/python3 -m pip install --upgrade pip
 
 RUN pip install pandas \
