@@ -1,21 +1,21 @@
 FROM jupyter/tensorflow-notebook:tensorflow-2.13.0
 
-RUN apt-get update
-RUN apt-get install -y git \
-  wget \
-  libgl1-mesa-glx
+# RUN apt-get update
+# RUN apt-get install -y git \
+#   wget \
+#   libgl1-mesa-glx
 
-# install pip
-RUN apt-get install -y python3-pip
+# # install pip
+# RUN apt-get install -y python3-pip
 
-RUN /usr/bin/python3 -m pip install --upgrade pip
+# RUN /usr/bin/python3 -m pip install --upgrade pip
 
-RUN pip install pandas \
-  sklearn \
-  scipy \
-  matplotlib \
-  imutils \
-  opencv-python
+# RUN pip install pandas \
+#   sklearn \
+#   scipy \
+#   matplotlib \
+#   imutils \
+#   opencv-python
 
 
 
