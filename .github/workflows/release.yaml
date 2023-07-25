@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'jupyter/tensorflow/**'
+      - 'jupyter/**'
 
 env:
   REGISTRY: ghcr.io
@@ -35,14 +35,25 @@ jobs:
           echo "::set-output name=dockerfiles::$(find . -type f -name Dockerfile)"
         shell: bash
 
+      - name: Extract framework and version
+        id: framework_version
+        run: |
+          for dockerfile in ${{ steps.files.outputs.dockerfiles }}
+          do
+            relative_path=$(realpath --relative-to=./jupyter $dockerfile)
+            framework=$(dirname $relative_path | cut -d'/' -f1)
+            version=$(basename $(dirname $relative_path))
+            echo "Processing Dockerfile for framework $framework version $version..."
+            echo "FRAMEWORK=$framework" >> $GITHUB_ENV
+            echo "VERSION=$version" >> $GITHUB_ENV
+          done
+        shell: bash
+
       - name: Build and push Docker images
         run: |
           for dockerfile in ${{ steps.files.outputs.dockerfiles }}
           do
-            version=$(basename $(dirname $dockerfile))
-            echo "Building Dockerfile $dockerfile for TensorFlow version $version..."
-            
-            docker build -f $dockerfile -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$version .
-            docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$version
+            docker build -f $dockerfile -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.FRAMEWORK }}-${{ env.VERSION }} .
+            docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.FRAMEWORK }}-${{ env.VERSION }}
           done
         shell: bash
